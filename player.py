@@ -1,3 +1,77 @@
-# Player Class
-# test commit
-# You suck for making me do this, WILLIAM!!!
+#Player Class
+
+class Player:
+    def __init__(self, name:str, wallet = Shop_Sells) -> None:
+        self.hp = 100
+        self.inventory = []
+        self.wallet = Shop_Sells
+
+
+    
+    def get_health(self): #retrieving the health of player
+        
+
+
+        def alive(self):
+            if self.hp > 0:
+                print(get_health)
+            else:
+              self.hp = 0
+              print("You have been defeated!")  
+
+    def get_inventory(): #retrieving inventory of player (list)
+
+
+
+
+#Im making an enemy        
+'''
+class Enemy:
+# health
+# inventory
+'''
+
+#I'm making a list of inventory to use
+'''
+class Inventory():
+'''
+
+#I'm making a store to buy and sell items
+'''
+class Shop_Sells():
+    def __init__(self, money = 0) -> None:
+        self.money = money
+
+    def deposit(self, amount):
+        self.money += amount
+
+    def pay(self, amount:int, wallet):
+        if amount <= self.money:
+            self.money -= amount
+            wallet.deposit(amount)
+        else:
+            print("Not enough funds")
+    
+    def show_funds(self):
+        print(f"The current balance ${self.money}")
+'''
+
+#I'm making a wallet for each player to use from
+'''
+ class Person:
+    def __init__(self, name:str, age:int, wallet = Wallet(),job:str|None = None) -> None:
+        self.name = name
+        self.age = age
+        self.wallet = wallet 
+        self.job = job
+
+    def get_wallet(self):
+        return self.wallet
+
+    def about(self):
+        print(f"{self.name}\n{self.age}\n{self.job}")
+        self.wallet.show_funds()
+
+    def say(self, message):
+        print(f"{self.name}: \"{message}\"")
+'''

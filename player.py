@@ -1,26 +1,23 @@
 #Player Class
 
 class Player:
-    def __init__(self, name:str, wallet = Shop_Sells) -> None:
+    def __init__(self, name:str, wallet:Shop) -> None:
+        self.name = name
         self.hp = 100
         self.inventory = []
-        self.wallet = Shop_Sells
+        # self.wallet = Shop_Sells
 
-
-    
     def get_health(self): #retrieving the health of player
-        
-
-
-        def alive(self):
-            if self.hp > 0:
-                print(get_health)
-            else:
-              self.hp = 0
-              print("You have been defeated!")  
+        pass
+    def alive(self):
+        if self.hp > 0:
+            return True   
+        else:
+            self.hp = 0
+            return False
 
     def get_inventory(): #retrieving inventory of player (list)
-
+        pass
 
 
 
@@ -31,14 +28,14 @@ class Enemy:
 # inventory
 '''
 
-#I'm making a list of inventory to use
+#I'm making a list of inventory to use ?
 '''
 class Inventory():
 '''
 
 #I'm making a store to buy and sell items
 '''
-class Shop_Sells():
+class Shop:
     def __init__(self, money = 0) -> None:
         self.money = money
 

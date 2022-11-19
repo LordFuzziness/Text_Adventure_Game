@@ -9,13 +9,15 @@ class ConType(Enum):
 	HAS_ITEM = 3
 	GREATER_OR_EQUAL = 4
 	LESS_OR_EQUAL = 5
+	AND = 6
+	OR = 7
 
 class ConVal:
 	def __init__(self, value) -> None:
 		self.value = value
 
 class Constraint:
-	def __init__(self, player, item1:ConVal, constraint:ConType, item2:ConVal = None) -> None:
+	def __init__(self, player, item1:ConVal | any, constraint:ConType, item2:ConVal | any = None) -> None:
 		"""
 		item1 and item2 should be lists that contain only one item each
 		"""
@@ -51,8 +53,18 @@ class Constraint:
 					return True
 				else:
 					return False
-			case ConType.LESS:
+			case ConType.GREATER:
 				if self.item1.value > self.item2.value:
+					return True
+				else:
+					return False
+			case ConType.AND:
+				if self.item1.check() & self.item2.check():
+					return True
+				else:
+					return False
+			case ConType.GREATER:
+				if self.item1.check() & self.item2.check():
 					return True
 				else:
 					return False
@@ -83,22 +95,25 @@ class Scenario:
 	def delete_action(self, action:str):
 		del self.actions[action]
 
-	def add_constraint(self, constraint, action):
+	def set_constraint(self, constraint, action):
 		self.constraints[action] = constraint
 
-	def add_reward_constraint(self, constraint, reward:str):
-		self.constraints[reward] = constraint
+	def set_reward_constraint(self, constraint, reward:str):
+		self.reward_constraints[reward] = constraint
 
-	def set_reward(self, reward:str, item):
-		self.actions[reward] = item
+	def add_reward(self, reward:str, item):
+		if reward not in self.rewards.keys():
+			self.rewards[reward] = [item]
+		else:
+			self.rewards[reward].append(item)
 
 	def delete_reward(self, reward:str):
-		del self.actions[reward]
+		del self.rewards[reward]
 
 	def run(self):
 		for key, val in self.rewards.items():
 			if (self.reward_constraints[key].check() if key in self.reward_constraints.keys() else True):
-				self.player_instance.inventory.append(val)
+				self.player_instance.inventory.extend(val)
 
 		prompt_msg = self.prompt
 		for key, val in self.substitutions.items():

@@ -2,6 +2,7 @@
 
 class Player:
     def __init__(self, name:str, wallet:Shop) -> None:
+        self.name = name
         self.hp = 100
         self.inventory = []
         # self.wallet = Shop_Sells

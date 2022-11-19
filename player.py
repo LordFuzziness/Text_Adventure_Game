@@ -9,6 +9,7 @@ class Player:
 
     def get_health(self): #retrieving the health of player
         pass
+
     def alive(self):
         if self.hp > 0:
             return True   
@@ -16,7 +17,10 @@ class Player:
             self.hp = 0
             return False
 
-    def get_inventory(): #retrieving inventory of player (list)
+    def get_stats(self):
+        return f"HP:{self.hp}%\tITEMS:{len(self.inventory)}"
+
+    def get_inventory(self): #retrieving inventory of player (list)
         pass
 
 

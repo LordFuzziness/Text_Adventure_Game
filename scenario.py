@@ -1,6 +1,7 @@
-
 from enum import Enum
+import utility
 
+# - By William Lim
 
 class ConType(Enum):
 	EQUAL = 0
@@ -17,7 +18,7 @@ class ConVal:
 		self.value = value
 
 class Constraint:
-	def __init__(self, player, item1:ConVal | any, constraint:ConType, item2:ConVal | any = None) -> None:
+	def __init__(self, player, item1:ConVal, constraint:ConType, item2:ConVal = None) -> None:
 		"""
 		item1 and item2 should be lists that contain only one item each
 		"""
@@ -70,7 +71,7 @@ class Constraint:
 					return False
 
 class Scenario:
-	def __init__(self, player_instance, prompt:str, actions:dict = {}, substitutions:dict = {}) -> None:
+	def __init__(self, player_instance, prompt:str, actions:dict = {}, substitutions:dict = {}, triggers = []) -> None:
 		"""
 		The actions dictionary keys are what the player inputs and the values are the next scenario they will go to.
 
@@ -87,6 +88,10 @@ class Scenario:
 		self.constraints = {}
 		self.reward_constraints = {}
 		self.rewards = {}
+		self.triggers = triggers
+
+	def add_trigger(self, trigger):
+		self.triggers.append(trigger)
 
 	def set_action(self, action:str, scenario):
 		self.actions[action] = scenario
@@ -111,6 +116,9 @@ class Scenario:
 		del self.rewards[reward]
 
 	def run(self):
+		utility.clear_screen()
+		for trigger in self.triggers:
+			trigger()
 		for key, val in self.rewards.items():
 			if (self.reward_constraints[key].check() if key in self.reward_constraints.keys() else True):
 				self.player_instance.inventory.extend(val)
@@ -120,14 +128,16 @@ class Scenario:
 			prompt_msg = prompt_msg.replace("{"+ key +"}", val)\
 		
 		print(f"{prompt_msg}\n")
-		print(f"Actions:")
+		print(f"Option:")
 		for key in self.actions.keys():
-			if (self.constraints[player_input].check() if player_input in self.constraints.keys() else False):
-				print(f" - {key}")
+			if (self.constraints[key].check() if key in self.constraints.keys() else True):
+				print(f"{key}")
 		print(self.player_instance.get_stats())
 		player_input = ""
-		while player_input not in self.actions.keys() & (self.constraints[player_input].check() if player_input in self.constraints.keys() else False):
+		while True:
 			player_input = input(f"{self.player_instance.name}:").lower()
-			if player_input not in self.actions.keys() & (self.constraints[player_input].check() if player_input in self.constraints.keys() else False):
+			if player_input not in self.actions.keys() & self.constraints[player_input].check() if player_input in self.constraints.keys() else False:
 				print("That is not a valid action, please try again.")
+			else:
+				break
 		self.actions[player_input].run()

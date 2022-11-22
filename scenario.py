@@ -3,6 +3,10 @@ import utility
 
 # - By William Lim
 
+class ScenarioIdentity:
+	def __init__(self) -> None:
+		self.value = 0
+
 class ConType(Enum):
 	EQUAL = 0
 	LESS = 1
@@ -64,14 +68,14 @@ class Constraint:
 					return True
 				else:
 					return False
-			case ConType.GREATER:
-				if self.item1.check() & self.item2.check():
+			case ConType.OR:
+				if self.item1.check() | self.item2.check():
 					return True
 				else:
 					return False
 
 class Scenario:
-	def __init__(self, player_instance, prompt:str, actions:dict = {}, substitutions:dict = {}, triggers = []) -> None:
+	def __init__(self, identifier:ScenarioIdentity, player_instance, prompt:str, actions:dict = {}, substitutions:dict = {}, triggers = []) -> None:
 		"""
 		The actions dictionary keys are what the player inputs and the values are the next scenario they will go to.
 
@@ -89,6 +93,8 @@ class Scenario:
 		self.reward_constraints = {}
 		self.rewards = {}
 		self.triggers = triggers
+		self.id = identifier.value
+		identifier.value += 1
 
 	def add_trigger(self, trigger):
 		self.triggers.append(trigger)

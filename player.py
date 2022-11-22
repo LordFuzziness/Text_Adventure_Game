@@ -23,7 +23,9 @@ class Player:
     def get_inventory(self): #retrieving inventory of player (list)
         pass
 
-
+    # add a save function that saves all the player's stats and takes in the parameter scenario:int
+    # scenario:int is the id number of the current scenario
+    # all data should be saved as json to a file.
 
 #Im making an enemy        
 '''
